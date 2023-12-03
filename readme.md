@@ -1,9 +1,21 @@
 # Yu-Gi-Oh | Jo-ken-po Edition
 
-Jogo de jokenpo que criei para explicar conceitos de lógica de programação aplicados a jogos
+Jogo de jokenpo desenvolvido no Bootcamp Programação de Jogos da DIO.
 
-conceitos abordados:
+Escolha uma carta e a sorte será lançada.
+
+<img src="./src/assets/screenshots/screenshot-desktop.png">
+
+## Conceitos abordados:
 
 - Armazenamento e gerenciamento de estado manual
 - Funções limpas
 - Organização de código
+
+## Para jogar
+
+Acesse o site [aqui](https://arianecledja.github.io/js-yugioh-game/)
+
+## Créditos
+
+[Projeto base](https://github.com/digitalinnovationone/js-yugioh-assets)

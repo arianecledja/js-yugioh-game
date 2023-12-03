@@ -1,3 +1,5 @@
+import { cardData } from "./cardData.js"
+
 const state = {
     score: {
         playerScore: 0,
@@ -20,7 +22,10 @@ const state = {
         computerBOX: document.querySelector('#computer-cards')
     },
     actions: {
-        button: document.getElementById('next-duel')
+        button: document.getElementById('next-duel'),
+        nextImg: document.getElementById('next'),
+        previousImg: document.getElementById('previous'),
+        checkVolumeInput: document.getElementById('checkVolume')
     }
 }
 
@@ -28,35 +33,6 @@ const playerSides = {
     player1: 'player-cards',
     computer: 'computer-cards'
 }
-
-const pathImages = './src/assets/icons/'
-
-const cardData = [
-    {
-        id: 0,
-        name: 'Blue Eyes White Dragon',
-        type: 'Paper',
-        img: `${pathImages}dragon.png`,
-        WinOf: [1],
-        LoseOf: [2]
-    },
-    {
-        id: 1,
-        name: 'Dark Magician',
-        type: 'Rock',
-        img: `${pathImages}magician.png`,
-        WinOf: [2],
-        LoseOf: [0]
-    },
-    {
-        id: 2,
-        name: 'Exodia',
-        type: 'Scissors',
-        img: `${pathImages}exodia.png`,
-        WinOf: [0],
-        LoseOf: [1]
-    },
-]
 
 async function getRandomCardId() {
     const randomIndex = Math.floor(Math.random() * cardData.length)
@@ -71,7 +47,9 @@ async function createCardImage(idCard, fieldSide) {
     cardImage.classList.add('card')
 
     if(fieldSide === playerSides.player1) {
-        cardImage.addEventListener('mouseover', () => {
+        cardImage.addEventListener('mouseover', () => { 
+            document.querySelector('.menu_avatar').style.border = '16px solid #fed900'
+            
             drawSelectCard(idCard)
         })
 
@@ -84,7 +62,6 @@ async function createCardImage(idCard, fieldSide) {
 }
 
 async function setCardsField(cardId) {
-    // remove as cartas antes, sorteia uma carta para o computador, desabilita a seleção( não pode trocar ), adiciona as cartas ao centro, da o resultado do duelo e carrega a pontuação
     await removeAllCardsImages()
 
     let computerCardId = await getRandomCardId()
@@ -121,9 +98,13 @@ async function hiddenCardDetails() {
     state.cardSprites.avatar.src = ''
     state.cardSprites.name.innerText = ''
     state.cardSprites.type.innerText = ''
+    
+    state.actions.nextImg.style.display = 'none'
+    state.actions.previousImg.style.display = 'none'
 }
 
 async function drawButton(text) {
+    document.querySelector('.menu_avatar').style.border = '0px solid #fed900'
     state.actions.button.innerText = text.toUpperCase()
     state.actions.button.style.display = 'block'
 }
@@ -153,11 +134,9 @@ async function checkDuelResults(playerCardId, computerCardId) {
 
 async function removeAllCardsImages() {
     let { computerBOX, player1BOX } = state.playerSides
-    //let cards = state.playerSides.computerBOX
     let imgElements = computerBOX.querySelectorAll('img')
     imgElements.forEach((img) => img.remove())
 
-    //cards = state.playerSides.playerBOX
     imgElements = player1BOX.querySelectorAll('img')
     imgElements.forEach((img) => img.remove())
 }
@@ -177,12 +156,16 @@ async function drawCards(cardNumber, fieldSide) {
     }
 }
 
+
 async function resetDuel() {
     state.cardSprites.avatar.src = ''
     state.actions.button.style.display = 'none'
 
     state.fieldCards.player.style.display = 'none'
     state.fieldCards.computer.style.display = 'none'
+
+    state.actions.nextImg.style.display = 'block'
+    state.actions.previousImg.style.display = 'block'
 
     init(5)
 }
@@ -192,18 +175,50 @@ async function playAudio(status) {
     try {
         audio.play()
     } catch(error) {
-
+        console.log(error);
     }
 }
+
+async function stopAudio() {
+    const icon = document.querySelector('label#checkVolumeLabel i')
+    const bgm = document.getElementById('bgm')
+    if(state.actions.checkVolumeInput.hasAttribute('checked')) {
+        icon.classList.remove('fa-volume-high') 
+        icon.classList.add('fa-volume-xmark')
+        state.actions.checkVolumeInput.removeAttribute('checked')
+        bgm.pause()
+    } else {
+        state.actions.checkVolumeInput.setAttribute('checked', 'checked')
+        icon.classList.add('fa-volume-high') 
+        icon.classList.remove('fa-volume-xmark')
+        bgm.play()
+    } 
+}
+
+function previousImage() {
+    const imgWidth = state.playerSides.player1BOX.offsetWidth
+    state.playerSides.player1BOX.scrollLeft -= imgWidth
+}
+
+function nextImage() {
+    const imgWidth = state.playerSides.player1BOX.offsetWidth
+    state.playerSides.player1BOX.scrollLeft += imgWidth
+}
+
 
 function init() {
     showHiddenCardFieldsImages(false)
 
-    drawCards(5, playerSides.player1)
-    drawCards(5, playerSides.computer)
+    drawCards(cardData.length, playerSides.player1)
+    drawCards(cardData.length, playerSides.computer)
 
     const bgm = document.getElementById('bgm')
     bgm.play()
 }
 
 init()
+
+state.actions.nextImg.addEventListener('click', nextImage)
+state.actions.previousImg.addEventListener('click', previousImage)
+state.actions.button.addEventListener('click', resetDuel)
+state.actions.checkVolumeInput.addEventListener('click', stopAudio)

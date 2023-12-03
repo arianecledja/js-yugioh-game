@@ -9,6 +9,19 @@ a:hover {
     cursor: url('../assets/cursor/yamiyugicursorGLOW.png'), auto;
 }
 
+.container__left,
+.card_details,
+.card-box__container,
+.card-versus__container,
+.versus-top,
+.versus-bottom,
+.card-box
+ {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .bg-video {
     position: absolute;
     z-index: -2;
@@ -49,14 +62,20 @@ a:hover {
 .container__left {
     width: 35%;
     min-width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: space-around;
+}
+
+.menu_avatar {
+    background-color: #fed900;
+    border-radius: 16px;
 }
 
 .container__right {
     width: 65%;
+}
+
+input#checkVolume {
+    display: none;
 }
 
 .score_box {
@@ -72,9 +91,6 @@ a:hover {
 .card_details {
     background-color: #fff;
     padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: space-between;
     height: 6rem;
     width: 100%;
@@ -90,15 +106,12 @@ a:hover {
 
 .card-box__container {
     height: 100vh;
-    display: flex;
-    flex-direction: column;
     justify-content: space-between;
     padding: 0.3rem;
 }
 
 .card-versus__container {
-    display: flex;
-    flex-direction: column;
+    max-width: 100%;
     justify-items: center;
     align-content: center;
     padding-top: 0.1rem;
@@ -108,8 +121,7 @@ a:hover {
 .versus-top,
 .versus-bottom {
     max-width: 100%;
-    display: flex;
-    align-items: center;
+    flex-direction: row;
     justify-content: center;
 }
 
@@ -122,12 +134,23 @@ a:hover {
 }
 
 .card-box {
-    height: 9rem;
+    height: 100%;
     width: 100%;
-    display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-around;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    position: relative;
+}
+
+.card-box .card {
+    width: 10rem;
+    height: 100%;
+    object-fit: cover;
+    margin-left: 1rem;  
+}
+.buttons {
+    display: flex;
 }
 
 .card-infield {
@@ -135,9 +158,10 @@ a:hover {
     width: 8rem;
     border: 1px solid #fff;
     border-radius: 8px;
+    overflow: hidden;
 }
 
-.card-infield > img {
+.card-infield img {
     width: 100%;
     height: 100%;
 }
@@ -160,6 +184,19 @@ a:hover {
     }
     .card-versus__container {
         flex-wrap: wrap;
+    }
+}
+
+@media screen and (max-width: 520px) {
+    .card-box__container {
+        height: auto;
+    }
+    .card-box {
+        height: 15rem;
+    }
+    .versus-top > img {
+        max-width: 8rem;
+        max-height: 8rem;
     }
 }
 
